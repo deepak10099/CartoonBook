@@ -30,8 +30,12 @@
             completionHandler:^(NSData *data,
                                 NSURLResponse *response,
                                 NSError *error) {
-                self.dataFromURLDictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-                self.dataFromURLDictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+                NSError *dataImportError = nil;
+                self.dataFromURLDictionary = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&dataImportError];
+                self.sectionsNamesArray = [self.dataFromURLDictionary allKeys];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self.collectionView reloadData];
+                });
             }] resume];
 
     
